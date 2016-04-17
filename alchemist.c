@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
       aflag=1; // amount is set
       break;
     case 'd':
-      dflag = 1;
+      dflag = 1; // debug is set
       break;
     case '?':
       if(optopt == 'p')
