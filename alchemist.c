@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
   opterr= 0; // make getopt silent
 
   // flags
-  int pflag, aflag, dflag;
+  int pflag = 0, aflag = 0, dflag = 0;
 
   // initial values
   char     *path   = "";  
@@ -75,11 +75,14 @@ int main(int argc, char *argv[]) {
 	fprintf (stderr, "Unknown option `\\x%x'.\n", optopt);
       exit(EXIT_FAILURE);
       break;
-    default:
-      fprintf (stderr, "aaa\n");
-      exit(EXIT_FAILURE);
-      break;
     }
+  }
+
+  // require correct path and amount
+  if(aflag == 0 || pflag == 0) {
+      fprintf (stderr, "Parameters: -p directory-path -a gold-amount [-d]\n");
+      fprintf (stderr, "Example: -a 200000 -p \"/home/milosz/.local/share/Icewind Dale - Enhanced Edition/save/000000008-2/\"\n");
+      exit(EXIT_FAILURE);
   }
   
   // print debug information
