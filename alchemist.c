@@ -1,10 +1,13 @@
-#include <stdio.h>     // io functions
-#include <stdlib.h>    // EXIT codes
-#include <ctype.h>     // getopt, isprint functions
-#include <unistd.h>    // getopt options
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <unistd.h>
+
+
+#include "alchemist.h"
 
 #define MAX_PATH_LEN 1024
-#define MAX_GOLD     10000000
+#define MAX_GOLD     10000000   // you can even set more then 1 000 000 000
 
 int main(int argc, char *argv[]) {
   // file
@@ -21,11 +24,14 @@ int main(int argc, char *argv[]) {
 
   // initial values
   char     *path   = "";  
-  long int  amount = 0;
+  unsigned long int  amount = 0;
 
   // full file path
   char path_buffer[MAX_PATH_LEN] = "";
 
+  // gold amount stored inside save file
+  unsigned int current_gold;
+  
   // temporary variables;
   char *str_end;
   
@@ -91,5 +97,23 @@ int main(int argc, char *argv[]) {
     printf("Defined gold amount = %ld\n", amount);
   }
 
+  // open save file
+  fp=fopen(path_buffer,"r+");
+  if(fp != NULL){
+    if(verify_file_type(fp) == 0) {
+      // read gold amount 
+      fseek(fp, 24, SEEK_SET);
+      fread(&current_gold,1,4,fp);
+
+      // print debug information
+      if(dflag == 1)
+	printf("Old gold amount     = %i\n", current_gold);
+
+      // write new walue
+      fseek(fp, 24, SEEK_SET);
+      fwrite(&amount, 1, sizeof(unsigned int), fp);
+    }
+    fclose(fp);  
+  }
   exit(EXIT_SUCCESS);  
 }
