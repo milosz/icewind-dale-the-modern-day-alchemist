@@ -1,2 +1,2 @@
-explain-umask: alchemist.c
+alchemist: alchemist.c
 	gcc -o alchemist alchemist.c
